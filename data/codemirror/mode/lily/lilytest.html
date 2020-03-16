@@ -1,0 +1,57 @@
+
+     <form><textarea  id="CMCode" name="CMCode">
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% Lilypond takes this file, which describes the music, and
+% converts it to a PDF. The file describes the MUSIC ONLY -
+% notes, rests, articulation and so on. You needn't concern 
+% yourself with layout or formatting; Lilypond takes care of 
+% all that automatically.
+% 
+% The PDF of this score generated completely by Lilypond and required
+% no 'tweaking' or tinkering.
+%
+% Anything after a '% 'sign' is a comment and is ignored by Lilypond
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+StaffC = \simultaneous {
+	\context Voice="StaffCVoiceA" \StaffCVoiceA
+	\context Voice="StaffCVoiceB" \StaffCVoiceB
+}
+\score {
+	\relative <<
+		\context Staff = cStaffAA <<
+			\context Voice = cStaffAA \StaffA
+		>>
+
+		\context Staff = cStaffBA <<
+			\context Voice = cStaffBA \StaffB
+		>>
+
+		\context Staff = cStaffCA <<
+			\context Voice = cStaffCVoiceA \StaffCVoiceA
+			\context Voice = cStaffCVoiceB \StaffCVoiceB
+		>>
+
+		\set Score.skipBars = ##t
+		\set Score.melismaBusyProperties = #'()
+	>>
+	\layout {
+		linewidth = 170.000 \mm
+		textheight = 250.000 \mm
+	}
+
+   \midi {
+     \context {
+       \Score
+       tempoWholesPerMinute = #(ly:make-moment 112 4)
+       }
+     }
+}
+
+</textarea></form>
+ 
+</html>

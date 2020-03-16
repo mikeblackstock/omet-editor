@@ -1,0 +1,840 @@
+<!doctype html>
+<html>
+  <head>
+    <title>CodeMirror: Lily mode</title>
+    <link rel="stylesheet" href="../../lib/codemirror.css">
+    <script src="../../lib/codemirror.js"></script>
+    <script src="lily.js"></script>
+    <style>.CodeMirror {background: #f8f8f8;}</style>
+    <link rel="stylesheet" href="../../doc/docs.css">
+  </head>
+  <body>
+     <form><textarea  id="code" name="code">
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% Lilypond takes this file, which describes the music, and
+% converts it to a PDF. The file describes the MUSIC ONLY -
+% notes, rests, articulation and so on. You needn't concern 
+% yourself with layout or formatting; Lilypond takes care of 
+% all that automatically.
+% 
+% The PDF of this score generated completely by Lilypond and required
+% no 'tweaking' or tinkering.
+%
+% Anything after a '% 'sign' is a comment and is ignored by Lilypond
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\version "2.13" 
+\paper{
+	ragged-last-bottom = ##f
+}
+#(set-global-staff-size 16)
+
+% This sets the header info
+\header {
+title = "Trio Op.9 No.1"
+subtitle = \markup{\italic "for flute, violin, and guitar"}
+
+composer =  \markup{\column {\line {" "}"Ferdinando Carulli" 
+			 { \italic "(1770 - 1841)"}
+			} 
+		}
+
+poet =		\markup{\column {\line {" "}\small "Typeset by Mike Blackstock"
+
+				\line{\small "http://blackstockweb.ca"}
+
+				\line{" "}
+				}
+			}
+piece= \markup{\bold "1. Allegro"}
+}
+
+% Here we begin entering music; this is the flute part.
+% 'StaffA' is just a label and could have been anything
+% (I suppose 'Flute' would have been more apropos)
+
+% It's a good idea to have one bar of notes per line
+% The numbers in the first column are just comments
+% to remind us what bar number follows
+
+StaffA = \relative c' {
+	\set Staff.instrumentName = "Flute"
+	\set Staff.midiInstrument = "flute"
+	\clef G
+	\key a \major
+	\time 4/4 
+	\partial 4
+	\repeat "volta" 2 {
+	e''8. _\markup{\italic "dolce" } cis16 |
+%1	
+	a4 a a a |  
+	gis gis16 (  fis e fis ) e8 a (  cis e ) | 
+	e (  d cis b ) a (  gis e' d ) |   
+	bis!4. (  cis16 d ) cis8 r16 e (  d cis b! a ) | 
+	gis4. b8 a r16 e' (  d cis b a ) |  
+	gis4. b8 a e' (  d cis ) | 
+	cis b d cis ais! b fis b |   
+	a! \acciaccatura { b } a16 gis a8 b gis r e'8. cis16 | 
+	a4 a a a |   
+%10	
+	gis gis16 (  fis e fis ) e8 a (  cis e ) | 
+	e (  d cis b ) a (  gis e' d ) |  
+	bis!4. (  cis16 d cis8 ) r16 e (  d cis b! a )|
+	gis4. b8 a r16 e' (  d cis b a ) |  
+	gis4. b8 a e' (  d cis ) | 
+	\acciaccatura { d } cis b d b \acciaccatura { cis } b a \acciaccatura { b } a gis |   
+	a2\ff cis4 e | 
+	d16 (  e ) cis (  d ) b (  cis ) a (  b ) gis (  a ) fis (  gis ) e (  fis ) d ( e ) |  
+	cis8 a cis e a cis e cis | 
+	d16 (  e d cis ) b (  cis b a ) gis (  a gis fis ) e (  fis e  d )|  
+%20	
+	cis8 a cis e a cis e e | 
+	e dis! dis4 r8 cis16 (  dis e dis e  cis) |  
+	\acciaccatura { d8 } cis b b4 r8 a16 (  b cis b cis  a) | 
+	\acciaccatura { b8 } a gis gis4 r8 b (  a  gis )|  
+	fis2 ~ fis8 eis! gis eis | 
+	fis2 ~ fis8 eis! gis eis |   
+	fis (  eis! gis eis ) fis (  eis gis  eis )| 
+	fis16 (  gis fis gis ) a (  b a b ) cis (  b a gis ) a (  gis fis  e ) |  
+	dis! (  b dis fis b8 ) b-. gis16 (  e gis b e8 ) e-. | 
+	dis,!16 (  b dis fis b8 ) b-. gis16 (  e gis b e8 ) e-. |   
+%30	
+	dis!4 b b r | 
+	R1 |   
+	R1 | 
+	R1 |  
+	R1 | 
+	R1 |  
+	R1 | 
+	R1 |   
+	R1 | 
+	e1\p ~ |   
+%40	
+	e ~ | 
+	e ~ |   
+	e2 (  dis!4  d!) | 
+	d8 (  cis b a ) gis4 fis |   
+	e16\f (  fis e fis ) gis (  a gis a ) b (  a gis a ) b (cis  dis!  e)  | 
+	dis!4 r r2 |   
+	e,16 (  fis e fis ) gis (  a gis a ) b (  a gis a ) b (  cis dis!  e ) | 
+	dis!4 r r2 |   
+	e8 gis,16 (  a b ) gis (  a b ) a (  gis fis gis ) a (  cis b ) a | 
+	gis8 gis16 (  a  b) gis (a b) a (gis fis gis) a (cis b a) |   
+%50	
+	gis8 gis16 (  a ) b (  a gis a ) b (  a gis fis ) e (  dis! cis  bis! ) | 
+	cis8 dis!16 (  e fis gis a b ) cis8 cis (  b  ais! ) |  
+	b-. b16 (  ais! ) b8-. b16 (  ais ) b8 cis dis! e | 
+	fis,1\trill |   
+	e16 (  fis e fis ) gis (  a gis a ) b (  a gis a ) b (cis  dis!  e)  | 
+	dis!4 r r2 |  
+	e,16 (  fis e fis ) gis (  a gis a ) b (  a gis a ) b (  cis dis!  e ) | 
+	dis!4 r r2 |   
+	e8 gis,16 (  a b ) gis (  a b ) a (  gis fis gis ) a (  cis b ) a | 
+	gis8 gis16 (  a  b) gis (a b) a (gis fis gis) a (cis b a) |   
+%60	
+	gis8 gis16 (  a ) b (  a gis a ) b (  a gis fis ) e (  dis! cis  bis! ) | 
+	cis8 dis!16 (  e fis gis a b ) cis8 cis (  b  ais! ) |   
+	b-. b16 (  ais! ) b8-. b16 (  ais ) b8 cis dis! e | 
+	fis,1\trill |   
+	e4 r gis _\markup{\italic "dolce" } gis | 
+	gis4. a8 ais! (  b \acciaccatura { d } cis  b ) |  
+	e,4. fis8 fisis! (  gis \acciaccatura { b } a  gis) | 
+	cis,4 dis'!8 (  cis ) b (  a gis  fis) |   
+	e8. (  fis32 e dis!8 ) r  gis4 gis | 
+	gis4. a8 ais! (  b \acciaccatura { d } cis  b ) |   
+%70
+	e,4. fis8 fisis! (  gis \acciaccatura { b } a  gis ) | 
+	cis, cis' (  b a ) \acciaccatura { b } a gis \acciaccatura { a } gis fis |   
+	e16\f (  fis gis a ) b (  cis dis! e ) dis8 b a fis | 
+	e16 (  fis gis a ) b (  cis dis! e ) dis8 b a fis |   
+	e'4 r16 b (  cis dis! e ) b (  cis dis e ) b (  cis  dis  |  
+	e4 ) e,8. e16 e4 e |   
+	e2 r4\fermata | 
+}
+	r 
+	\key c \major
+	R1 |
+	R1 |  
+	R1 | 
+%80	
+	R1 |   
+	r8 a,\p a a a r r4 | 
+	r8 g g g g r r4 |  
+	r8 fis! fis fis fis r r4 | 
+	r8 e e e e r r4 |   
+	d'8\ff b d b d b d b' | 
+	c16 g (  a b ) c (  g a b ) c (  b a g f e d  c ) |  
+	d8 b d b d b d b' | 
+	c16 g (  a b ) c (  g a b ) c (  b a g f e d  c ) |   
+% ex. acciaccatura { g16[ f] } e4
+	gis'!2\p r8 \acciaccatura {  a16 [gis f]  } gis8 a b | 
+%90	
+	a16 (  b c b a4 r8 ) a-. a ( b )  |   
+	c4 b8 (  a ) c4 b8 ( a )  | 
+	gis! (  b ) e,4 r8 gis (  a  b )|  
+	c4 b8 (  a ) c4 b8 ( a )  | 
+	gis!\ff e fis! gis a b cis! d |   
+	e fis! d cis! b a gis! e'  r2 r4\fermata \bar "||"   
+	\key a \major
+	e8.  _\markup{\italic "dolce" } cis16 |
+	 a4 a a a |   
+	gis gis16 (  fis e fis ) e8 a (  cis e ) | 
+	e (  d cis b ) a (  gis e' d ) |   
+%100
+	bis!4. (  cis16 d ) cis8 r16 e (  d cis b! a ) | 
+	gis4. b8 a r16 e' (  d cis b a ) |   
+	gis4. b8 a e' (  d cis ) | 
+	cis b d cis ais! b fis b |   % 9
+	a! \acciaccatura { b } a16 gis a8 b gis r e'8. cis16 | 
+	a4 a a a |   
+	gis gis16 (  fis e fis ) e8 a (  cis e ) | 
+	e (  d cis b ) a (  gis e' d ) |   
+	bis!4. (  cis16 d cis8 ) r16 e (  d cis b! a )| 
+	gis4. b8 a r16 e' (  d cis b a ) |  
+%110
+	gis4. b8 a e' (  d cis ) | 
+	\acciaccatura { d } cis b d b \acciaccatura { cis } b a \acciaccatura { b } a gis |  
+	a2\ff cis4 e | 
+	d16 (  e ) cis (  d ) b (  cis ) a (  b ) gis (  a ) fis (  gis ) e (  fis ) d ( e ) |   
+	cis8 a cis e a cis e cis | 
+	d16 (  e d cis ) b (  cis b a ) gis (  a gis fis ) e (  fis e  d )|   
+	cis8 a cis e a cis e e | 
+	b2 ~ b8 ais! cis ais |   
+	b2 ~ b8 ais! cis ais | 
+	b (  ais! cis ais ) b (  ais cis  ais ) |   
+%120
+	b16 (  cis b cis ) d (  e d e ) fis (  e d cis ) d (  cis b  a ) | 
+	gis (  e gis b e8 ) e-. e2 |   
+	gis,16 (  e gis b e8 ) e-. e2 | 
+	e4 e, e r |   
+	R1 | 
+	R1 |   
+	R1 | 
+	R1 |   
+	R1 | 
+	R1 |   
+%130
+	R1 | 
+	R1 |   
+	a1\p ~ | 
+	a ~ |  
+	a ~ | 
+	a2 gis4 ( g! ) |  
+	g!8 (  fis e d ) cis4 b | 
+	a r r2 |   
+	e''1 (  |  
+	cis4 ) r r2 |   
+%140
+	e1 (  |  
+	cis8 ) r cis r d r d r |   
+	cis r cis r d r d r | 
+	cis4 r8 d cis4 r8 d |   
+	cis4 r8 d cis4 r8 d | 
+	cis4 r r8 g! (  fis  eis! ) |   
+	fis4 r r r8 dis! | 
+	e4 r r2 |   
+	e8 d fis d \acciaccatura { e } d cis \acciaccatura { d } cis b | 
+	cis4 r r2 |   
+	e'1 (  |  
+	cis4 ) r r2 |   
+%150
+	e1 (  |  
+	cis8 ) r cis r d r d r |   
+	cis r cis r d r d r | 
+	cis4 r8 d cis4 r8 d |   
+	cis4 r8 d cis4 r8 d | 
+	cis4 r r8 g! (  fis  eis! ) |  
+	fis4 r r r8 dis! | 
+	e4 r r2 |   
+	e8 d fis d \acciaccatura { e } d cis \acciaccatura { d } cis b | 
+	a4 r cis' cis |   
+%160
+	cis4. d8 dis! (  e fis  e ) | 
+	a,4. b8   bis! cis \acciaccatura { e } d  cis |   
+	fis,4 gis8 (  ais! b cis d  b ) | 
+	a8. (  b32 a gis8 ) r  cis4  _\markup{\italic "dolce" } cis |   
+	cis4. d8 dis! (  e fis  e ) | 
+	a,4. b8 bis!   cis \acciaccatura { e } d  cis |   
+	fis, d' (  cis b ) \acciaccatura {  cis } b a \acciaccatura { b } a gis | 
+	a4 r8 cis\ff d16 (  cis b a gis fis e  d ) |   
+	cis4 r8 cis' d16 (  cis b a gis fis e  d ) | 
+	cis4 r16 e (  fis gis a ) e (  fis gis a ) e (  fis gis |   
+%170
+ 	a8 ) b cis d e cis d b | 
+	a4 a a r 
+	\bar "|."
+}
+StaffB = \relative c' {
+	\set Staff.instrumentName = "Violin"
+	\set Staff.midiInstrument = "violin"
+%	\set Staff.shortInstrumentName = "Vl."
+	\clef G
+	\key a \major
+	\time 4/4 
+	\partial 4
+	\repeat "volta" 2 {
+	r4 | 
+%1
+	cis'-.\p cis-. cis-. cis-. |   
+	e d cis a | 
+	b gis b b |   
+	gis2 ( a8 ) r r4 | 
+	r8 b (  d ) d ( cis ) r r4 |   
+	r8 b (  d ) d ( cis ) r r4 | 
+	d, r d dis! |   
+	< e cis' >2 < e b' >8 r r4 | 
+	cis'-. cis-. cis-. cis-. |   
+%10
+	e (  d cis ) a | 
+	b gis b b |   
+	gis2 ( a8 ) r r4 | 
+	r8 b (  d ) d ( cis ) r r4 |   
+	r8 b (  d ) d ( cis ) r r4 | 
+	e8 d fis d \acciaccatura { e } d cis \acciaccatura { d } cis b |  
+	< cis e >\ff < cis e >4 < cis e > < cis e > < cis a' >8 | 
+	b' a gis fis e d cis b |   
+	a e a cis < cis e > < cis e >4 < cis a' >8 | 
+	b' a gis fis e d cis b |  
+%20
+	a e a cis < cis e > < cis e >4 < cis a' >8 | 
+	r < b a' > < b a' > < b a' > < b a' > r r4 |   
+	r8 < dis! fis > < dis fis > < dis fis > < dis fis > r r4 | 
+	r8 e e e e r r4 |   
+	r8 cis cis cis d!2\sf | 
+	r8 cis cis cis d2\sf |  
+	cis4 d\sf cis d\sf | 
+	cis8 cis4 cis cis cis8 |   
+	b < a b >4 < a b >8 < gis b > < gis b >4 < gis b >8 | 
+	< a b > < a b >4 < a b >8 < gis b > < gis b >4 < gis b >8 |   
+%30
+	< a b >4 < fis dis'! > < fis dis' > r | 
+	gis,\p r gis gis |   
+	gis r r2 | 
+	gis4 r gis gis |   
+	r8 a a a a4 r | 
+	< b dis! >4. c!8 b c b c |   
+	b4 r r2 | 
+	< b dis! >4 r r2 |   
+	r8 e e e e4 r | 
+	cis'4. dis!8 fis (  e dis  cis ) |   
+%40
+	b (  cis b a ) gis gis a b | 
+	cis (  dis! e dis ) fis (  e dis  cis )|   
+	b4 e (  fis  gis ) | 
+	b8 (  a gis fis ) e4 dis! |   
+	e r r2 | 
+	b16\f (  cis b cis ) dis! (  e dis e ) fis (  e dis cis ) b (  a gis  fis ) |   
+	gis4 r r2 | 
+	b16 (  cis b cis ) dis! (  e dis e ) fis (  e dis cis ) b (  a gis  fis ) |   
+	gis8 e'16 (  fis gis ) e (  fis gis ) fis ( e dis! e ) fis (  a gis  fis ) | 
+	e8 e16 (  fis gis ) e (  fis gis ) fis (  e dis! e ) fis (  a gis  fis ) |   
+%50
+	e8 e16 (  fis ) gis (  fis e fis ) gis (  fis e dis! ) cis (  b a  gis ) | 
+	a8 b16 (  cis dis! e fis gis ) a8 a (  gis  fisis! ) |   
+	gis-. gis16 (  fisis! ) gis8-. gis16 (  fisis ) gis8 (  a fis!  gis ) | 
+	dis!1\trill |   
+	e4 r r2 | 
+	b16 (  cis b cis ) dis! (  e dis e ) fis (  e dis cis ) b (  a gis  fis ) |   
+	gis4 r r2 | 
+	b16 (  cis b cis ) dis! (  e dis e ) fis (  e dis cis ) b (  a gis  fis ) |   
+	gis8 e'16 (  fis gis ) e (  fis gis ) fis ( e dis! e fis ) (  a gis  fis ) | 
+	e8 e16 (  fis gis ) e (  fis gis ) fis (  e dis! e ) fis (  a gis  fis ) |   
+%60
+	e8 e16 (  fis ) gis (  fis e fis ) gis (  fis e dis! ) cis (  b a  gis ) | 
+	a8 b16 (  cis dis! e fis gis ) a8 a (  gis  fisis! ) |   
+	gis-. gis16 (  fisis! ) gis8-. gis16 (  fisis ) gis8 (  a fis!  gis ) | 
+	dis!1\trill |   
+	e4 r gis, _\markup{\italic "dolce" } gis | 
+	gis4. a8 ais! b \acciaccatura { d } cis b |   
+	e,4. fis8 fisis! gis \acciaccatura { b } a gis | 
+	cis,4 dis'!8 (  cis ) b (  a gis  fis! ) |   
+	e8. (  fis32 e ) dis!8 r gis4 gis | 
+	gis4. a8 ais! b \acciaccatura { d } cis b |   
+%70
+	e,4. fis8 fisis! gis \acciaccatura { b } a gis | 
+	cis, a'' (  gis fis  )\acciaccatura {  gis } fis e \acciaccatura { fis } e dis! |   
+	e4\f gis a16 (  gis fis e ) dis! (  cis b  a ) | 
+	gis4 gis' a16 (  gis fis e ) dis! (  cis b  a ) |   
+	gis4 r16 b (  cis dis! e ) b (  cis dis e ) b (  cis dis |  
+	e4 ) < gis, b e > < gis b e > < gis b e > |   
+	< gis b e > 2 r4\fermata | 
+}
+	d''8. b16 
+	\key c \major
+	g4 g g g | 
+	fis! fis16 (  e d e ) d8 g b d |   
+	d (  c b a ) g (  fis! d'  c ) | 
+%80
+	ais!4. (  b16 c ) b8 b \acciaccatura { d } c b |   
+	b4 r r8 b \acciaccatura { d } c b | 
+	b4 r r8 c16 (  b a g fis! ) e |   
+	\acciaccatura { fis!8 } e dis! dis4 r8 c' (  b ) a | 
+	\acciaccatura { b } a g g4 r8 g g g |   
+	f!16\ff (  e d e ) f (  e d e ) f (  e d c b a g  f ) | 
+	e8 c e c e c e c |   
+	f'16 (  e d e ) f (  e d e ) f (  e d c b a g  f ) | 
+	e8 c e c e c e c |   
+	d\p (  e ) d (  e ) d (  e ) d ( e ) | 
+%90
+	c (  e c e ) c4 r |   
+	dis'!8 dis4 dis dis dis8 | 
+	e4 b8 gis! e4 r |   
+	dis'!1 | 
+	e8\ff e, fis! gis! a b cis! d |   
+	e fis! d cis! b a gis! e'  r2 r4\fermata \bar "||"  
+	\key a \major
+	r | 
+	cis-.\p cis-. cis-. cis-. |  
+	e  (d cis a )| 
+	b gis b b |   
+%100
+	gis2 ( a8 ) r r4 | 
+	r8 b (  d ) d ( cis ) r r4 |  
+	r8 b (  d ) d ( cis ) r r4 | 
+	d, r d dis! |   
+	< e cis' >2 < e b' >8 r r4 | 
+	cis'-. cis-. cis-. cis-. |   
+	e (  d cis ) a | 
+	b gis b b |  
+	gis2 ( a8 ) r r4 | 
+	r8 b (  d ) d ( cis ) r r4 |   
+%110
+	r8 b (  d ) d ( cis ) r r4 | 
+	e8 d fis d \acciaccatura { e } d cis \acciaccatura { d } cis b |   
+	< cis e >\ff < cis e >4 < cis e > < cis e > < cis a' >8 | 
+	b' a gis fis e d cis b |   
+	a e a cis < cis e > < cis e >4 < cis a' >8 | 
+	b' a gis fis e d cis b |   
+	a e a cis < cis e > < cis e >4 < cis a' >8 | 
+	r fis fis fis g!2\sf |   
+	r8 fis fis fis g!2\sf | 
+	fis4 g!\sf fis g\sf |   
+%120
+	fis8\sf fis4 fis fis fis8 | 
+	e < d e > 4< d e > 8 cis16 ( a cis e a8 ) a-. |   
+	e < d e > 4< d e > 8 cis16 ( a cis e a8 ) a-. | 
+	gis4 < gis, b e > < gis b e > r |  
+	cis,\p r cis cis | 
+	cis r r2 |   
+	cis4 r cis cis | 
+	r8 d d d d4 r |   
+	<b gis' > r r2 | 
+	< b e > 4r r2 |   
+%130
+	< b gis' > 4r < b e > r | 
+	r8 < a e' > < a e' > < a e' > < a e' > 4r |  
+	fis'4. gis8 b (  a gis  fis ) | 
+	e fis e d cis cis ( d e )|   
+	fis (  gis a gis ) b (  a gis  fis ) | 
+	e4 a (  b  cis ) |   
+	e8 (  d cis b ) a4 gis | 
+	a r r2 |   
+	gis'8-. fis-. e-. d-. cis-. b-. a-. gis-. | 
+	a4-. r r2 |   
+%140
+	gis'8-. fis-. e-. d-. cis-. b-. a-. gis-. | 
+	a\f r a' r b r b r |  
+	a r a r b r b r | 
+	a4 r8 b a4 r8 b |   
+	a4 r8 b a4 r8 b | 
+	a4 r r8 a,, b cis |   
+	d4 r r r8 dis! | 
+	e4 r r2 |  
+	d4 r e e | 
+	a r r2 |   
+%150
+	gis'8-. fis-. e-. d-. cis-. b-. a-. gis-. | 
+	a4-. r r2 |   
+	gis'8-. fis-. e-. d-. cis-. b-. a-. gis-. | 
+	a r a' r b r b r |   
+	a r a r b r b r | 
+	a4 r8 b a4 r8 b |   
+	a4 r8 b a4 r8 b | 
+	a4 r r8 a,, b cis |   
+	d4 r r r8 dis! | 
+	e4 r r2 |   
+%160
+	d4 r e e | 
+	a r cis _\markup{\italic "dolce" } cis |  
+	cis4. d8 dis! (  e \acciaccatura { gis } fis  e ) | 
+	a,4. b8 bis!   cis \acciaccatura { e } d  cis  |   
+	fis,4 gis8 (  ais! b cis d  b ) | 
+	a!8. (  b32 a gis8 ) r  cis4 cis |  
+	cis4. d8 dis! (  e \acciaccatura { gis } fis  e ) | 
+	a,4. b8 bis!   cis \acciaccatura { e } d  cis  |  
+	fis, fis' (  e \acciaccatura { e } d ) d \acciaccatura { d } cis cis b | 
+	cis4 r8 a' \ff b16 (  a gis fis e d cis  b ) |   % 173
+%170
+	a4 r8 a' b16 (  a gis fis e d cis  b ) | 
+	a4 r16 e (  fis gis a ) e (  fis gis a ) e (  fis gis |   
+	a8 ) b cis d e cis d b | 	
+	a4 < e cis' > < e cis' > r 
+\bar "|."
+}
+
+
+StaffCVoiceA = \relative c {
+	\set Staff.instrumentName = "Guitar"
+	\set Staff.midiInstrument = "acoustic guitar (nylon)"
+	\voiceOne 
+	\clef "G_8"
+	\key a \major
+	\time 4/4 
+	\partial 4
+	\repeat "volta" 2 {
+	r4 | 
+%1
+	< a' cis > 8e' < a, cis > e' < a, cis > e' < a, cis > e' |  
+	< a, d > fis' < a, d > fis' < a, cis > e' < a, cis > e' | 
+	< gis, b > e' < gis, b > e' < gis, b > e' < gis, b > e' |   % 5
+	< gis, bis! > e' < gis, bis > e' < a, cis > 4r | 
+	r8 < b d > < b d > < b d > < a cis > r r4 |  
+	r8 < b d > < b d > < b d > < a cis > r r4 | 
+	< d fis > r < d fis > r |   
+	< a cis > 8e' < a, cis > e' < gis, b e > r r4 | 
+	< a cis > 8e' < a, cis > e' < a, cis > e' < a, cis > e' |  
+%10
+	< a, d > fis' < a, d > fis' < a, cis > e' < a, cis > e' | 
+	< gis, b > e' < gis, b > e' < gis, b > e' < gis, b > e' |   
+	< gis, bis! > e' < gis, bis > e' < a, cis > 4r | 
+	r8 < b d > < b d > < b d > < a cis > r r4 |  
+	r8 < b d > < b d > < b d > < a cis > r r4 | 
+	< d fis > r e,8 < a cis > e, < gis' b > |   
+	a,16 a' cis e a,, a' cis e a,, a' cis e a,, a' cis e | 
+	< gis, b e > 4< gis b e > < gis b e > < gis b e > |  
+	a,16 a' cis e a,, a' cis e a,, a' cis e a,, a' cis e | 
+	< gis, b e > 4< gis b e > < gis b e > < gis b e > |   
+%20
+	a,16 a' cis e a,, a' cis e a,, a' cis e a,, a' cis e | 
+	r8 < a, b > < a b > < a b > < a b > 4r |   % 23
+	r8 < a dis! > < a dis > < a dis > < a dis > 4r | 
+	r8 < gis b e > < gis b e > < gis b e > < gis b e > 4r |   
+	r8 cis cis cis d!2 | 
+	r8 cis cis cis d2 |   
+	cis4 d cis d | 
+	a,8 a' a, a' a, a' r4 |   
+	b,8 dis! fis dis e b gis e | 
+	b' dis! fis dis e b gis e |   
+%30
+	< dis'! b' > 4< dis b' > < dis b' > r | 
+	b''4. gis16 e b'8 gis16 e b'8 gis16 e |   
+	e,,8 e'16 gis fis a gis b a cis b dis! cis e dis fis | 
+	e8 fis gis a b gis \acciaccatura { gis } fis e |   
+	e dis! fis e dis4 r | 
+	a'4. fis16 dis! a'8 fis16 dis a'8 fis16 dis |   
+	a'8 b,, dis! fis a c! dis! fis | 
+	a gis16 a fis gis e fis dis! e fis e dis cis b a |   
+	cis8 b \acciaccatura { b } a gis gis4 r | 
+	< a cis > 4.< b dis! > 8< dis fis > < cis e > < b dis > < a cis > |   
+%40
+	< gis b > < a cis > < gis b > < fis a > r < e gis > < fis a > < gis b > | 
+	< a cis > < b dis! > < cis e > < b dis > < dis fis > < cis e > < b dis > < a cis > |  
+	< gis b > 4gis a b | 
+	< a cis > r < gis b > < a b > |  
+	gis8 b e b gis b e gis | 
+	a fis dis! b a fis dis! b |   
+	e gis b e gis, b e gis | 
+	a fis dis! b a fis dis! b |   
+	e, gis b e dis! b a fis | 
+	e gis b e dis! b a fis |   
+%50
+	e gis b e e, e' e, e' | 
+	< a cis > 4r r2 |   
+	< gis b > 4< gis b > < gis b > r | 
+	< a b > 8< a b > < a b > < a b > < a b > < a b > < a b > < a b > |   
+	gis b e b gis b e gis | 
+	a fis dis! b a fis dis! b |   
+	e gis b e gis, b e gis | 
+	a fis dis! b a fis dis b |   
+	e, gis b e dis! b a fis | 
+	e gis b e dis! b a fis |  
+%60
+	e gis b e e, e' e, e' | 
+	< a cis > 4r r2 |   
+	< gis b > 4< gis b > < gis b > r | 
+	< a b > 8< a b > < a b > < a b > < a b > < a b > < a b > < a b > |   
+	< gis b > 4r r2 | 
+	e8 b' e, b' e, gis e gis |   
+	cis, gis' cis, gis' cis, e cis e | 
+	a, e' a, e' a, cis r4 |   
+	gis' fis8 r r2 | 
+	e8 b' e, b' e, gis e gis |   
+%70
+	cis, gis' cis, gis' cis, e cis e | 
+	< a cis > 4r b,8 < gis' b > b, < a' b > |   
+	< e, b' e gis b e > 4< e b' e gis b e > < b' dis! a' b fis' > < b dis a' b fis' > | 
+	< e, b' e gis b e > < e b' e gis b e > < b' dis! a' b fis' > < b dis a' b fis' > |   
+	< e, b' e gis b e > r < e b' e gis b e > < e b' e gis b e > | 
+	< e b' e gis b e > < e b' e gis b e > < e b' e gis b e > < e b' e gis b e > |  
+	< e b' e gis b e > 2r4 \fermata| 
+}
+	r 
+
+	\key c \major
+	b''8 d b d b d b d | 
+	c e c e b d b d |  
+	< a c > fis'! < a, c > fis' < a, c > fis' < a, c > fis' | 
+%80
+	< b, d > g' < b, d > g' < b, d > r r4 |   
+	r8 < b fis'! > < b fis' > < b fis' > < b fis' > r r4 | 
+	r8 < b g' > < b g' > < b g' > < b g' > r r4 |  
+	r8 < a b > < a b > < a b > < a b > r r4 | 
+	r8 < g b > < g b > < g b > < g b > r r4 |   
+	< g b f'! > < g b f' > < g b f' > < g b f' > | 
+	< g c e > < g c e > < g c e > < g c e > |   
+	< g b f' > < g b f' > < g b f' > < g b f' > | 
+	< g c e > < g c e > < g c e > < g c e > |   
+	r8 < gis! b > < gis b > < gis b > r < gis b > < gis b > < gis b > | 
+%90
+	r < a c > < a c > < a c > < a c > 4r |   
+	r8 < a c > < a c > < a c > r < a c > < a c > < a c > | 
+	r < gis! b > < gis b > < gis b > < gis b > 4r |   
+	r8 < a c > < a c > < a c > r < a c > < a c > < a c > | 
+	< gis! b > e, fis! gis! a b cis! d |   
+	e fis! d cis! b a gis! e'  r2 r4\fermata \bar "||"  
+	\key a \major
+	r | 
+	< a cis > 8e' < a, cis > e' < a, cis > e' < a, cis > e' |  
+	< a, d > fis' < a, d > fis' < a, cis > e' < a, cis > e' | 
+	< gis, b > e' < gis, b > e' < gis, b > e' < gis, b > e' |   
+%100
+	< gis, bis! > e' < gis, bis > e' < a, cis > 4r | 
+	r8 < b d > < b d > < b d > < a cis > r r4 |  
+	r8 < b d > < b d > < b d > < a cis > r r4 | 
+	< d fis > r r2 |   
+	< a cis > 8< a e' > < a cis > e' < gis, b e > r r4 | 
+	< a cis > 8e' < a, cis > e' < a, cis > e' < a, cis > e' |  
+	< a, d > fis' < a, d > fis' < a, cis > e' < a, cis > e' | 
+	< gis, b > e' < gis, b > e' < gis, b > e' < gis, b > e' |  
+	< gis, bis! > e' < gis, bis > e' < a, cis > 4r | 
+	r8 < b d > < b d > < b d > < a cis > r r4 |  
+%110
+	r8 < b d > < b d > < b d > < a cis > r r4 | 
+	< d fis > r e,8 < a cis > e, < gis' b > |  
+	a,16 a' cis e a,, a' cis e a,, a' cis e a,, a' cis e | 
+	< gis, b e > 4< gis b e > < gis b e > < gis b e > |   
+	a,16 a' cis e a,, a' cis e a,, a' cis e a,, a' cis e | 
+	< gis, b e > 4< gis b e > < gis b e > < gis b e > |   
+	a,16 a' cis e a,, a' cis e a,, a' cis e a,, a' cis e | 
+	r8 fis fis fis g!2 |   
+	r8 fis fis fis g!2 | 
+	fis4 g! fis g |  
+%120
+	d,8 d' d, d' d, d' d, dis! | 
+	e gis b gis a e cis a |   
+	e' gis b gis a e cis a | 
+	< b e gis b e >4 < b e gis b e > < b e gis b e > r |  
+	e''4. cis16 a e'8 cis16 a e'8 cis16 a | 
+	r8 e16 gis fis a gis b a8 b cis d |   
+	dis! e fis e \acciaccatura { e } d! cis b a | 
+	a gis b a gis4 r |   
+	d'4. b8 gis e d b | 
+	gis b e gis b gis d' cis |  
+%130
+	d cis b a gis fis' e d | 
+	\acciaccatura { e } d cis cis cis cis4 r |   
+	d,4. e8 gis fis e d | 
+	cis d cis b r a b cis |   
+	d e fis e gis fis e d | 
+	cis4 cis d e |   
+	< d fis > r e,8 < a cis > e, < gis' b > | 
+	a,16 cis e a cis e a e cis'8 a e' cis |   
+	b16 d a cis gis b fis a e gis d fis cis e b d | 
+	a, cis e a cis e a e cis'8 a e' cis |   
+%140
+	b16 d a cis gis b fis a e gis d fis cis e b d | 
+	a' e cis e a e cis e gis e d e gis e d e |  
+	a e cis e a e cis e gis e d e gis e d e | 
+	a e cis e d b gis' e a e cis e d b gis' e |  
+	a e cis e d b gis' e a e cis e d b gis' e | 
+	a8 a,, cis e a g! fis eis! |   
+	fis d fis a d fis a dis,,! | 
+	e a cis e a cis e cis |   
+	cis b d b b a \acciaccatura { b } a gis | 
+	a,,16 cis e a cis e a e cis'8 a e' cis |   
+%150
+	b16 d a cis gis b fis a e gis d fis cis e b d | 
+	a, cis e a cis e a e cis'8 a e' cis |  
+	b16 d a cis gis b fis a e gis d fis cis e b d | 
+	a' e cis e a e cis e gis e d e gis e d e |   
+	a e cis e a e cis e gis e d e gis e d e | 
+	a e cis e d b gis' e a e cis e d b gis' e |   
+	a e cis e d b gis' e a e cis e d b gis' e | 
+	a8 a,, cis e a g! fis! eis! |   
+	fis d fis a d fis a dis,,! | 
+	e a cis e a cis e cis |   
+%160
+	cis b d b b a \acciaccatura { b } a gis | 
+	a4 r r2 |   
+	a,8 e' a, e' a, cis a cis | 
+	fis, cis' fis, cis' fis, a fis a |   
+	d, fis d fis d fis r4 | 
+	cis' b8 r r2 |   
+	a8 e' a, e' a, cis a cis | 
+	fis, cis' fis, cis' fis, a fis a |   
+	< b d >4 r e,8 < a cis > e, < gis' b > | 
+	a,16 cis e a cis e a e < gis, b >4. < gis b >8 |   
+%170
+	a,16 cis e a cis e a e < gis, b >4. < gis b >8 | 
+	< a cis >4 r < e a cis e > < e a cis e > |  
+	< e a cis e >2 r | 
+	r4 < e a cis e > < e a cis e > r 
+	\bar "|."
+}
+
+StaffCVoiceB = \relative c {
+	\voiceTwo 
+	                   
+	r4 a2 a   
+	a a e e   
+%4
+	a4 a a r r8 f'! e e a, r r4   
+	r8 f'! e e a, r r4 d r d dis!   
+	e2 e,8 r r4 a2 a  
+%10
+	a a e e   
+	a a4 r r8 f'! e e a, r r4   
+	r8 f'! e e a, r r4 d r e e,  
+	a a a a e e e e   
+	a a a a e e e e   
+%20
+	a a a a r8 fis fis fis fis4 r  
+	r8 fis fis fis fis4 r r8 e e e e4 r  
+	r8 a' a a b2 r8 a a a b2   
+	a4 b a b a, a a a8 ais!   
+	s1 s   
+%30
+	b4 b b s e,2 r  
+	e8 e' fis gis a b cis dis! e,,2 r  
+	fis fis4 r fis2 r   
+	s1 fis2 r   
+	e e4 r e2 e  
+%40
+	e e e e  
+	e4 e'8 e, fis' e, gis' e, a4 r b b   
+	e,2 e fis r  
+	e e fis r  
+	s1 s   
+%50
+	s a4 r r2   
+	e4 e e r b'8 b b b b b b b  
+	e,2 e fis r  
+	e e fis r  
+	s1 s   
+%60
+	s a4 r r2   
+	e4 e e r b'8 b b b b b b b  
+	e,4 r r2 e'4 e e e   
+	cis cis cis cis a a a a8 ais!  
+	b4 b8 r r2 e4 e e e   
+%70
+	cis cis cis cis a r b b  
+	e, e b' b e, e b' b   
+	e, r e e e e e e   
+	e2 s4 s   
+	g2 g g g  
+%80
+	d'4 d d d g,2 g8 r r4   
+	r8 dis'! dis dis dis r r4 r8 e e e e r r4   
+	r8 fis! fis fis fis r r4 r8 e e e e r r4   
+	b8 g b g b g b g c g c g c g c g   
+	b g b g b g b g c g c g c g c g   
+
+	e2 	e 
+%90	e e4 r   
+	f2 f f f e e4 r   
+	f2 f s1   
+	s s2.   
+	s4 a2 a   
+	a a e e   
+%100
+	a a4 r r8 f'! e e a, r r4   
+	r8 f'! e e a, r r4 d r d dis!   
+	e2 e,8 r r4 a2 a   
+	a a e e   
+	a a4 r r8 f'! e e a, r r4  
+%110	
+	r8 f'! e e a, r r4 d r e e,   
+	a a a a e e e e   
+	a a a a e e e e   
+	a a a a r8 d' d d e2   
+	r8 d d d e2 d4 e d e  
+%120
+	d, d d s4 s1   
+	s e,4 e e r   
+	a2 r a a   
+	a r e r   
+	e r e r   
+%130
+	e r a a4 r   
+	a2 a a a   
+	a a a4 a'8 a, b' a, b' a,  
+	d4 r e e, s1   
+	e2 e s1  
+%140
+	e2 e a4 a e e  
+	a a e e a e a e   
+	a e a e s1  
+	s s   
+	d'2 e,4 e s1   
+	e2 e s1   
+	e2 e a4 a e e   
+	a a e e a e a e   
+	a e a e s1  
+	s s   
+	d'2 e,4 e a r r2  
+	a'4 a a a fis fis fis fis  
+	d d d d8 dis! e4 e8 r r2   
+	a4 a a a fis fis fis fis   
+	d r e e, a r e4. e8   
+	a4 r e4. e8 a4 r a a  
+	a8 b cis d e cis d b a4 a a r 
+}
+
+
+StaffC = \simultaneous {
+	\context Voice="StaffCVoiceA" \StaffCVoiceA
+	\context Voice="StaffCVoiceB" \StaffCVoiceB
+}
+\score {
+	\relative <<
+		\context Staff = cStaffAA <<
+			\context Voice = cStaffAA \StaffA
+		>>
+
+		\context Staff = cStaffBA <<
+			\context Voice = cStaffBA \StaffB
+		>>
+
+		\context Staff = cStaffCA <<
+			\context Voice = cStaffCVoiceA \StaffCVoiceA
+			\context Voice = cStaffCVoiceB \StaffCVoiceB
+		>>
+
+		\set Score.skipBars = ##t
+		\set Score.melismaBusyProperties = #'()
+	>>
+	\layout {
+		linewidth = 170.000 \mm
+		textheight = 250.000 \mm
+	}
+
+   \midi {
+     \context {
+       \Score
+       tempoWholesPerMinute = #(ly:make-moment 112 4)
+       }
+     }
+
+
+}
+
+</textarea></form>
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {lineNumbers:true});
+    </script>
+
+
+
+  </body>
+</html>

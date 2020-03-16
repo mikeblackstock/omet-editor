@@ -1,0 +1,19 @@
+{
+  "type": "application",
+  "name": "Editor",
+  "category": "development",
+  "singleton":true,
+  "server": null,
+  "title": {
+    "en_EN": "Editor"
+  },
+  "description": {
+    "en_EN": "Editor"
+  },
+  "files": [
+    "main.js"
+  ],
+  "mimes": [
+    "text\/x-lilypond"
+  ]
+}

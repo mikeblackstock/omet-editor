@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dijit/themes/claro/claro.css">
+<link rel="stylesheet" href="codemirror/lib/codemirror.css">
+<style type="text/css">
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow:hidden;
+}
+
+#borderContainer {
+    width: 100%;
+    height: 100%;
+}
+</style> 
+	<script src="codemirror/lib/codemirror.js"></script>
+	<script src="codemirror/lib/util/search.js"></script>
+	<script src="codemirror/lib/util/dialog.js"></script>
+	<script src="codemirror/lib/util/dialog.css"></script>
+	<script src="codemirror/lib/util/searchcursor.js"></script>
+	<script src="codemirror/mode/lily/lily.js"></script>
+</head>
+  <body class="claro">
+
+<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'sidebar', gutters:true, liveSplitters:true" id="borderContainer">
+    
+ 			<div  splitter= "true"  dojoType="dijit.layout.TabContainer" attachParent="true" region="center" id="centerTabs" tabStrip="true">
+
+
+			</div><!-- centerTabs -->
+</div> 
+      	
+    <script>
+    let editor= [];
+      // Global function to send a message to OS.js Application
+      function sendMessage() {
+
+        top.postMessage({
+          name: 'osjs/iframe:message',
+          params: [{
+            pid: parseInt(window.location.search.match(/pid=([^&]*)/)[1], 10),
+            wid: parseInt(window.location.search.match(/wid=([^&]*)/)[1], 10),
+            args: Array.prototype.slice.call(arguments)
+          }]
+        }, '*');
+      }
+
+      // Listen from messages from OS.js Application
+/*
+      window.addEventListener('message', function(ev) {
+        alert('Message from OS.js', ev.data);
+			alert(ev.data);
+      });
+*/
+      // Send an example message
+ //     sendMessage('Ping');
+    </script>
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"
+            data-dojo-config="async: true">
+    </script>
+ 	
+ <script>           
+ 
+     require(["dojo/parser",
+
+	"dijit/layout/ContentPane",
+    "dijit/layout/BorderContainer",
+    "dijit/layout/TabContainer"
+     ], function (parser) {
+            // now parse the page for widgets
+            parser.parse();
+            let queryString = window.location.search;
+        	let urlParams = new URLSearchParams(queryString);
+			let jsonFile = urlParams.get('file');
+			createEditorPane(jsonFile, "");
+			sendMessage(["readFile", jsonFile]);
+     });
+
+    // ev.data[0] - function to run
+    // ev.data[1] - param
+ 	window.addEventListener('message', function(ev) {
+
+		switch (ev.data[0]) {
+			case 'createEditorPane':
+	 			createEditorPane(ev.data[1], ev.data[2]);
+	 			break;
+	 		case 'updateEditor':
+	 			updateEditor(ev.data[1]);
+	 			
+	 			break;
+ 		}	
+
+  	});	
+
+	function updateEditor(content) {
+		editor[0].setValue(content);
+
+
+	}
+ 	function createEditorPane(jsonFile, content) {
+     require([
+     "dijit/registry",
+     "dijit/layout/BorderContainer",
+     "dijit/layout/ContentPane",
+     "dijit/layout/TabContainer"
+     
+     ], function () {
+            // now parse the page for widgets
+ 
+ 			
+			let file= JSON.parse(jsonFile);
+			file.editor= editor.length;
+ 		 	var contentpane= new dijit.layout.ContentPane({
+  //  			"class": "pngContentPane",
+  //  			type: "pngContentPane",
+  //  			path: path,
+    			file: file,
+    			title: file.filename,	
+  //  			id: id,
+  //  			iconClass: "pngIcon",
+				content: "<textarea  id='code" + editor.length + "'  style='width:100%; height: 100%'>" + content + "</textarea>", 
+    			closable:true
+    			 });
+    	   		dijit.registry.byId("centerTabs").addChild(contentpane);
+   	   			dijit.registry.byId("centerTabs").selectChild(contentpane);    	   		
+    			editor[editor.length]= CodeMirror.fromTextArea(document.getElementById("code" + parseInt(editor.length)), {
+        			lineNumbers: true
+	    		});    		
+
+		
+
+     });
+
+ 	}	
+
+	
+
+    function makeID(par) {
+    	    var id= '';
+    		var sp= par.split("/");
+    		var length= sp.length;		
+    		
+    		for (var i= 0; i < length; i++) {
+    			id= id + sp[i] + "_";
+    		}
+    		return id;
+    }
+
+
+</script>
+
+  </body>
+</html>
+
