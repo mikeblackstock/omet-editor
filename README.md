@@ -1,2 +1,3 @@
-# MyOmetApplication
-Boilerplate iframe app for Osjs-Omet
+# Omet-Editor
+
+Codemirror-based editor for lilypond code
