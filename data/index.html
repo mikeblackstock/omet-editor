@@ -35,6 +35,7 @@ html, body {
       	
     <script>
     let editor= [];
+    let record= [""];
       // Global function to send a message to OS.js Application
       function sendMessage() {
 
@@ -75,7 +76,8 @@ html, body {
             let queryString = window.location.search;
         	let urlParams = new URLSearchParams(queryString);
 			let jsonFile = urlParams.get('file');
-			createEditorPane(jsonFile, "");
+			
+			createEditorPane(jsonFile, "stub");
 			sendMessage(["readFile", jsonFile]);
      });
 
@@ -86,6 +88,10 @@ html, body {
 		switch (ev.data[0]) {
 			case 'createEditorPane':
 	 			createEditorPane(ev.data[1], ev.data[2]);
+//	 			let record= `createEditorPane(${ev.data[1]}, ${ev.data[2]}`;
+
+	 			let cmd= "createEditorPane('" + ev.data[1] + "', '" + ev.data[2] + "')";
+//	 			eval(cmd);
 	 			break;
 	 		case 'updateEditor':
 	 			updateEditor(ev.data[1]);
