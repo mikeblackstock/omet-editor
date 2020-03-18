@@ -4,14 +4,22 @@ import {name as applicationName} from './metadata.json';
 // Our launcher
 const register = (core, args, options, metadata) => {
   // Create a new Application instance
-  const proc = core.make('osjs/application', {args, options, metadata});
+const proc = core.make('osjs/application', {args, options, metadata});
 const vfs = core.make('osjs/vfs');
+let files= [];
 let stashedContents;
 const stashFile = function(contents) {
 	stashedContents= contents;
 
 };
-
+const notify= (msg) => {
+	core.make('osjs/notification', {
+		timeout:0,
+ 		message: msg,
+//  	icon: 'icon.src',
+    	onclick: () => console.log('Clicked!')
+	});	
+};
   // Create  a new Window instance
  proc.createWindow({
  	attributes: {
@@ -39,7 +47,7 @@ const stashFile = function(contents) {
     win.on('blur', () => iframe.contentWindow.blur());
     win.on('focus', () => iframe.contentWindow.focus());
     proc.on('iframe:post', msg => iframe.contentWindow.postMessage(msg, window.location.href));
-	proc.on('iframe:createEditorPane', msg => iframe.contentWindow.postMessage(['createEditorPane', msg], window.location.href));
+
     // Listen for messages from iframe
     // and send to server via websocket
     win.on('iframe:get', msg => {
@@ -52,19 +60,37 @@ const stashFile = function(contents) {
 // 				.then(contents => console.log(contents))
 // 				.catch(error => console.error(error)); // FIXME: Dialog
  				break;
+ 			case "getFiles":
+ 				console.log(files);
+ 				alert("Check log");
+ 				break;
+ 			case "restore":
+ 				core.run("Editor", msg[1]);
+ 				break;
  		}
 
 // 		proc.send(msg);
     });
  	proc.on('attention', (args) => {
-
+		
+		if (args.file) {
 
 		vfs.readfile(args.file)
 			.then(contents => proc.emit('iframe:post', ["createEditorPane", JSON.stringify(args.file), contents]))
 			.catch(error => console.error(error)); // FIXME: Dialog
+		}	
+		
+		
+		else {
+
+			proc.emit('iframe:post', args);
+		}
+
 	});
   	if (proc.args.file) {
+
   		iframe.src= iframe.src + "&file=" + JSON.stringify(proc.args.file);
+
 //  		const suffix = `?file=${JSON.stringify(proc.args.file)}`;
 //  		iframe.src = proc.resource('/data/index.html') + suffix;
 		vfs.readfile(proc.args.file)
@@ -72,6 +98,7 @@ const stashFile = function(contents) {
 			.catch(error => console.error(error)); // FIXME: Dialog
 	
   	}		
+	
 	
     $content.appendChild(iframe);
     

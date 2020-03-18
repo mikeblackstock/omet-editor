@@ -35,7 +35,8 @@ html, body {
       	
     <script>
     let editor= [];
-    let record= [""];
+    let files= [];
+    let content = [];
       // Global function to send a message to OS.js Application
       function sendMessage() {
 
@@ -93,9 +94,21 @@ html, body {
 	 			let cmd= "createEditorPane('" + ev.data[1] + "', '" + ev.data[2] + "')";
 //	 			eval(cmd);
 	 			break;
+	 		case 'closePanes':
+	 			closePanes(ev.data[1]);
+	 			break;
 	 		case 'updateEditor':
 	 			updateEditor(ev.data[1]);
-	 			
+	 			break;
+	 		case 'stashFiles':
+	 		
+	 			stashFiles();
+	 			break;
+	 		case 'showStash':
+	 			console.log(files);
+	 			break;
+	 		case 'restoreStash':
+	 			createEditorPane(JSON.stringify(files[0]), '');
 	 			break;
  		}	
 
@@ -125,7 +138,7 @@ html, body {
   //  			path: path,
     			file: file,
     			title: file.filename,	
-  //  			id: id,
+    			id: makeID(file.path),
   //  			iconClass: "pngIcon",
 				content: "<textarea  id='code" + editor.length + "'  style='width:100%; height: 100%'>" + content + "</textarea>", 
     			closable:true
@@ -135,14 +148,76 @@ html, body {
     			editor[editor.length]= CodeMirror.fromTextArea(document.getElementById("code" + parseInt(editor.length)), {
         			lineNumbers: true
 	    		});    		
-
+				
 		
 
      });
 
  	}	
 
-	
+function stashFiles() {
+     require([
+     "dijit/registry",
+     "dijit/layout/BorderContainer",
+     "dijit/layout/ContentPane",
+     "dijit/layout/TabContainer"
+     
+     ], function () {
+
+
+
+			let location= "centerTabs";
+			let firstTab = 0;
+			files= [];
+			content= [];
+			let length= dijit.registry.byId(location).getChildren().length;
+
+
+			for (var i=firstTab; i < length; i++) {
+				
+				files.push(dijit.registry.byId(location).getChildren()[i].file);
+				content.push(dijit.registry.byId(location).getChildren()[i].content);
+			}
+			
+
+		});	
+	}
+
+ 	function closePanes() {
+     require([
+     "dijit/registry",
+     "dijit/layout/BorderContainer",
+     "dijit/layout/ContentPane",
+     "dijit/layout/TabContainer"
+     
+     ], function () {
+
+
+
+			let location= "centerTabs";
+			let firstTab = 0;
+			let nodes= [];
+			
+			let length= dijit.registry.byId(location).getChildren().length;
+
+
+			for (var i=firstTab; i < length; i++) {
+				
+				nodes[i-firstTab]= dijit.registry.byId(location).getChildren()[i].id;			
+			}
+			
+			for (var i=0; i < nodes.length; i++) {
+				
+				if (nodes[i] != "smileysAccordion") {
+					dijit.registry.byId(location).removeChild(dijit.registry.byId(nodes[i]));
+				
+					dijit.registry.byId(nodes[i]).destroyRecursive();
+				}	
+
+			}
+
+		});	
+	}
 
     function makeID(par) {
     	    var id= '';
