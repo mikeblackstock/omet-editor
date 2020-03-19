@@ -6,7 +6,8 @@ const register = (core, args, options, metadata) => {
   // Create a new Application instance
 const proc = core.make('osjs/application', {args, options, metadata});
 const vfs = core.make('osjs/vfs');
-let files= [];
+const settings = core.make('osjs/settings');
+
 let stashedContents;
 const stashFile = function(contents) {
 	stashedContents= contents;
@@ -32,7 +33,8 @@ const notify= (msg) => {
   })
   .on('destroy', () => proc.destroy())
   .render(($content, win) => {
-  	  	
+  	console.log("SETTINGS:\n");
+  	console.log(settings.get('osjs/application/Editor').files);  	
     // Add our process and window id to iframe URL
     const suffix = `?pid=${proc.pid}&wid=${win.wid}`;
 
@@ -54,18 +56,33 @@ const notify= (msg) => {
 		
  		switch (msg[0]) {
  			case "readFile":
+ 
  				let file= JSON.parse(msg[1]);
  				proc.emit("iframe:post", ["updateEditor", stashedContents]);
 // 				vfs.readfile(file)
 // 				.then(contents => console.log(contents))
 // 				.catch(error => console.error(error)); // FIXME: Dialog
  				break;
- 			case "getFiles":
- 				console.log(files);
- 				alert("Check log");
+ 
+ 			case "saveSettings":
+//settings.set('osjs/application/Editor', 'files', null);
+ 				settings.set('osjs/application/Editor', 'files', msg[1]);
+ 				console.log("Settings saved");
+ 				break;
+ 				
+ 			case "getSettings":
+ 				console.log(settings.get('osjs/application/Editor').files);
+ 
  				break;
  			case "restore":
- 				core.run("Editor", msg[1]);
+ 				let files= settings.get('osjs/application/Editor').files;
+ 				for (let i=0; i < files.length; i++) {
+// 					proc.emit('iframe:post', ["createEditorPane", JSON.stringify(settings.get('osjs/application/Editor').files[i]), "stub"]);
+				vfs.readfile(files[i])
+				.then(contents => proc.emit('iframe:post', ["createEditorPane", JSON.stringify(settings.get('osjs/application/Editor').files[i]), contents]))
+				.catch(error => console.error(error)); // FIXME: Dialog
+				}	
+	
  				break;
  		}
 
@@ -79,7 +96,7 @@ const notify= (msg) => {
 			.then(contents => proc.emit('iframe:post', ["createEditorPane", JSON.stringify(args.file), contents]))
 			.catch(error => console.error(error)); // FIXME: Dialog
 		}	
-		
+
 		
 		else {
 
@@ -97,9 +114,30 @@ const notify= (msg) => {
 			.then(contents => stashFile(contents))
 			.catch(error => console.error(error)); // FIXME: Dialog
 	
-  	}		
-	
-	
+  	}
+  	else {
+			
+ 				let files= settings.get('osjs/application/Editor').files;
+ 				for (let i=0; i < files.length; i++) {
+// 					proc.emit('iframe:post', ["createEditorPane", JSON.stringify(settings.get('osjs/application/Editor').files[i]), "stub"]);
+				vfs.readfile(files[i])
+				.then(contents => proc.emit('iframe:post', ["createEditorPane", JSON.stringify(settings.get('osjs/application/Editor').files[i]), contents]))
+				.catch(error => console.error(error)); // FIXME: Dialog
+			}
+
+  	}
+ /* 	
+	if (settings.get('osjs/application/Editor').files.length > 0) {
+		let files= settings.get('osjs/application/Editor').files;
+ 			for (let i=0; i < files.length; i++) {
+// 					proc.emit('iframe:post', ["createEditorPane", JSON.stringify(settings.get('osjs/application/Editor').files[i]), "stub"]);
+				vfs.readfile(files[i])
+				.then(contents => proc.emit('iframe:post', ["createEditorPane", JSON.stringify(settings.get('osjs/application/Editor').files[i]), contents]))
+				.catch(error => console.error(error)); // FIXME: Dialog
+			}
+
+	}
+*/
     $content.appendChild(iframe);
     
   });
