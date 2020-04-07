@@ -2,6 +2,7 @@
   "type": "application",
   "name": "Editor",
   "category": "development",
+  "autostart":false,
   "singleton":true,
   "server": null,
   "title": {

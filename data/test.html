@@ -26,7 +26,26 @@ html, body {
   <body class="claro">
 
 <div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'sidebar', gutters:true, liveSplitters:true" id="borderContainer">
-    
+ <div region="top" id="toolbar1" data-dojo-type="dijit/Toolbar">
+ 		<button  onclick="saveFile();">Save</button>
+		<button  onclick="compile();">Compile</button>
+ 
+
+
+  		<button  onclick="closeEditors();">Close all</button> 
+ <!-- 		
+ 		<button  onclick="stashEditors();saveSettings();">S & S</button>
+ 
+ <button  onclick="sendMessage(['restore']);">Restore</button>
+   		
+   		<button  onclick="sendMessage(['showSettings']);">Settings</button>
+   		<button  onclick="sendMessage(['clearSettings']);">Clear</button>
+		<button  onclick="console.log(files);">Files</button>
+-->	
+ </div>
+ 
+ 
+ 
  			<div  splitter= "true"  dojoType="dijit.layout.TabContainer" attachParent="true" region="center" id="centerTabs" tabStrip="true">
 
 
@@ -67,7 +86,8 @@ html, body {
  <script>           
  
      require(["dojo/parser",
-
+	"dijit/Toolbar",
+	"dijit/form/Button",
 	"dijit/layout/ContentPane",
     "dijit/layout/BorderContainer",
     "dijit/layout/TabContainer"
@@ -78,12 +98,18 @@ html, body {
         	let urlParams = new URLSearchParams(queryString);
         	
 			let jsonFile = urlParams.get('file');
-			if (jsonFile != null) {
+
+			if (JSON.parse(jsonFile).path !== "restored") {
+				console.log(JSON.parse(jsonFile));
+//				alert("index.html:103 ");
 				createEditorPane(jsonFile, "stub");
 			
 				sendMessage(["readFile", jsonFile]);
 			}
 			else {
+				console.log(JSON.parse(jsonFile));
+//				alert("index.html:110 ");
+
 				sendMessage(["restore"]);
 			}
 			
@@ -92,12 +118,12 @@ html, body {
     // ev.data[0] - function to run
     // ev.data[1] - param
  	window.addEventListener('message', function(ev) {
-
+//		alert("index.html:120 ");
 		switch (ev.data[0]) {
 			case 'createEditorPane':
 	 			createEditorPane(ev.data[1], ev.data[2]);
 //	 			let record= `createEditorPane(${ev.data[1]}, ${ev.data[2]}`;
-
+//				alert("index.html:125");
 	 			let cmd= "createEditorPane('" + ev.data[1] + "', '" + ev.data[2] + "')";
 //	 			eval(cmd);
 	 			break;
@@ -105,10 +131,12 @@ html, body {
 	 			closeEditors();
 	 			break;
 
-	 		case 'saveEditors':
+	 		case 'stashEditors':
 	 			//   - issued from console
   -				//	 invokes 'attention' -> 'iframe:post'
-	 			saveEditors();
+	 			stashEditors();
+
+	 			
 //	 			let jsonString= JSON.stringify(files);
 //				sendMessage("saveEditors", JSON.stringify(files));
 
@@ -117,16 +145,18 @@ html, body {
 
 				sendMessage(["saveSettings", files]);
 				break
-	 		case 'saveSettingsCB':
-	 			console.log(ev.data[1]);
+
+
+	 		case 'saveSession':
+	 			sendMessage(["saveSession", ev.data[1]]);
 	 			break;
-	 			
-	 		case 'getSettings':
-	 			sendMessage(["getSettings"]);
+	 		case 'clearSettings':
+	 		
+	 			sendMessage(["clearSettings"]);
 	 			break;
-	 		case 'getSettingsCB':
-	 			console.log(ev.data[1]);
-	 			break;
+			case 'showSettings':
+				sendMessage(["showSettings"]);
+				break;
 	 		case 'restore':
 	 			sendMessage(["restore"]);
 	 			break;	
@@ -142,12 +172,51 @@ html, body {
 
   	});	
 
+
+	function compile() {
+     require([
+     "dijit/registry",
+     "dijit/layout/BorderContainer",
+     "dijit/layout/ContentPane",
+     "dijit/layout/TabContainer"
+     
+     ], function () {
+     	saveFile();
+		let file= dijit.registry.byId("centerTabs").selectedChildWidget.file;
+		let editorID= dijit.registry.byId("centerTabs").selectedChildWidget.editorID;
+		let code= editor[editorID].getValue();
+
+//console.log(file);
+//alert("Editor:index.html:179");
+		sendMessage(["compile", file]);
+		});	
+	}
+	
+	function saveFile() {
+     require([
+     "dijit/registry",
+     "dijit/layout/BorderContainer",
+     "dijit/layout/ContentPane",
+     "dijit/layout/TabContainer"
+     
+     ], function () {
+		let file= dijit.registry.byId("centerTabs").selectedChildWidget.file;
+		let editorID= dijit.registry.byId("centerTabs").selectedChildWidget.editorID;
+		let code= editor[editorID].getValue();
+		sendMessage(["saveFile", file, code]);
+		});	
+		stashEditors();
+		saveSettings();
+		
+	}	
+	
 	function updateEditor(content) {
 		editor[0].setValue(content);
 
 
 	}
  	function createEditorPane(jsonFile, content) {
+// 				alert("index.html:218 ");
      require([
      "dojo/_base/lang",
      "dijit/registry",
@@ -157,18 +226,27 @@ html, body {
      
      ], function (lang) {
             // now parse the page for widgets
- 
+ 			
+ 			
  			
 			let file= JSON.parse(jsonFile);
-			files.push(file);
+//			files.push(file);
 //			file.editor= editor.length;
+			let id= makeID(file.path)
+				if (dijit.registry.byId(id)) {
+//					alert(id);
+					return;
+				}	
+			
  		 	var contentpane= new dijit.layout.ContentPane({
   //  			"class": "pngContentPane",
   //  			type: "pngContentPane",
   //  			path: path,
+  				editorID: editor.length,
     			file: file,
     			title: file.filename,	
-    			id: makeID(file.path),
+    			id: id,
+    			onClose: function() {sendMessage(["removeEditor", file]);return true;},
   //  			iconClass: "pngIcon",
 				content: "<textarea  id='code" + editor.length + "'  style='width:100%; height: 100%'>" + content + "</textarea>", 
     			closable:true
@@ -178,14 +256,26 @@ html, body {
     			editor[editor.length]= CodeMirror.fromTextArea(document.getElementById("code" + parseInt(editor.length)), {
         			lineNumbers: true
 	    		});    		
+				
+
 //				lang.hitch(sendMessage("saveSettings", JSON.stringify(files)));
-		
+//				stashEditors();
+//				saveSettings();
+				
 
      });
 
  	}	
+function saveSettings(){
+	sendMessage(["saveSettings", files]);
+}
+function closeEditorCB () {
 
-function saveEditors() {
+	stashEditors();
+	saveSettings();
+
+}
+function stashEditors() {
      require([
      "dijit/registry",
      "dijit/layout/BorderContainer",
@@ -199,17 +289,17 @@ function saveEditors() {
 			let location= "centerTabs";
 			let firstTab = 0;
 			files= [];
-			content= [];
+
 			let length= dijit.registry.byId(location).getChildren().length;
 
 
 			for (var i=firstTab; i < length; i++) {
 				
 				files.push(dijit.registry.byId(location).getChildren()[i].file);
-				content.push(dijit.registry.byId(location).getChildren()[i].content);
+
 			}
 			//before we make cookie, let's check length
-
+//			sendMessage(["saveSettings", files]);
 		});	
 	}
 

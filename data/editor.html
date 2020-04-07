@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dijit/themes/claro/claro.css">
+<link rel="stylesheet" href="codemirror/lib/codemirror.css">
+<style type="text/css">
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow:hidden;
+		font-size: 13px;
+		font-family: arial, verdana;	
+}
+
+#borderContainer {
+    width: 100%;
+    height: 100%;
+}
+
+
+</style> 
+
+	<script src="codemirror/lib/codemirror.js"></script>
+	<script src="codemirror/lib/util/search.js"></script>
+	<script src="codemirror/lib/util/dialog.js"></script>
+	<script src="codemirror/lib/util/dialog.css"></script>
+	<script src="codemirror/lib/util/searchcursor.js"></script>
+	<script src="codemirror/mode/lily/lily.js"></script>
+</head>
+  <body class="claro">
+
+<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'sidebar', gutters:true, liveSplitters:true" id="borderContainer">
+
+ <div region="top" id="toolbar1" data-dojo-type="dijit/Toolbar">
+ 	<button onclick="saveFile();" type="button"
+	data-dojo-type="dijit.form.Button"
+	data-dojo-attach-event="onClick: save"
+	data-dojo-props="showLabel:true, iconClass: 'savePostIcon', disabled: false"
+	data-dojo-attach-point="saveButton"
+	title= "Save"
+	>
+	Save
+	</button>
+ 	<button onclick="compile();" type="button"
+	data-dojo-type="dijit.form.Button"
+	data-dojo-attach-event="onClick: compile"
+	data-dojo-props="showLabel:true, iconClass: 'savePostIcon', disabled: false"
+	data-dojo-attach-point="saveButton"
+	title= "Compile"
+	>
+	Compile
+	</button>
+
+ <!--
+ <button  onclick="/*eslint-disable no-undef */
+ 		saveFile();">Save</button>
+		<button  onclick="compile();">Compile</button>
+ 		
+		<button  onclick="sendMessage(['showSettings']);">Settings</button>
+
+    	<button  onclick="sendMessage(['clearSettings']);">Clear</button>
+ 		<button  onclick="sendMessage(['restore']);">Restore</button>
+
+  		<button  onclick="closeEditors();">Close all</button> 
+ 
+ 		
+ 		<button  onclick="stashEditors();saveSettings();">S & S</button>
+ 
+ <button  onclick="sendMessage(['restore']);">Restore</button>
+   		
+   		<button  onclick="sendMessage(['showSettings']);">Settings</button>
+   		<button  onclick="sendMessage(['clearSettings']);">Clear</button>
+		<button  onclick="console.log(files);">Files</button>
+-->
+ </div>
+ 
+ 
+ 
+ 			<div  splitter= "true"  dojoType="dijit.layout.TabContainer" attachParent="true" region="center" id="centerTabs" tabStrip="true">
+
+
+			</div><!-- centerTabs -->
+</div> 
+      	
+    <script>
+    let editor= [];
+    let files= [];
+    let content = [];
+    let pos= {ch:0, line:0};
+    let cursor= {};
+    
+      // Global function to send a message to OS.js Application
+      function sendMessage() {
+
+        top.postMessage({
+          name: 'osjs/iframe:message',
+          params: [{
+            pid: parseInt(window.location.search.match(/pid=([^&]*)/)[1], 10),
+            wid: parseInt(window.location.search.match(/wid=([^&]*)/)[1], 10),
+            args: Array.prototype.slice.call(arguments)
+          }]
+        }, '*');
+      }
+
+      // Listen from messages from OS.js Application
+/*
+      window.addEventListener('message', function(ev) {
+        alert('Message from OS.js', ev.data);
+			alert(ev.data);
+      });
+*/
+      // Send an example message
+ //     sendMessage('Ping');
+    </script>
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"
+            data-dojo-config="async: true">
+    </script>
+ 	
+ <script>           
+ 
+     require(["dojo/parser",
+	"dijit/Toolbar",
+	"dijit/form/Button",
+	"dijit/layout/ContentPane",
+    "dijit/layout/BorderContainer",
+    "dijit/layout/TabContainer"
+     ], function (parser) {
+            // now parse the page for widgets
+            parser.parse();
+            let queryString = window.location.search;
+        	let urlParams = new URLSearchParams(queryString);
+
+			if (urlParams.get('restore')) {
+				sendMessage(["restore"]);
+				return;
+			}					
+
+
+        	let file= {};
+        	if ( JSON.parse(urlParams.get('file'))) {
+        		file= JSON.parse(urlParams.get('file'));
+        	}
+        	else {
+        		file= urlParams.get('file');
+        	} 
+ 
+    
+
+			if (file.path !== "restored") {
+
+				createEditorPane(file, "stub");
+			
+				sendMessage(["readFile"]);
+//				sendMessage(["restore"]);
+			}
+			else {
+				alert("restoring");
+				sendMessage(["restore"]);
+			}
+			
+     });
+
+    // ev.data[0] - function to run
+    // ev.data[1] - param
+ 	window.addEventListener('message', function(ev) {
+//		alert("index.html:120 ");
+		switch (ev.data[0]) {
+			case 'createEditorPane':
+	 			createEditorPane(ev.data[1], ev.data[2], ev.data[3]);
+//	 			let record= `createEditorPane(${ev.data[1]}, ${ev.data[2]}`;
+//				alert("index.html:125");
+	 			let cmd= "createEditorPane('" + ev.data[1] + "', '" + ev.data[2] + "')";
+//	 			eval(cmd);
+	 			break;
+	 		case 'closeEditors':
+	 			closeEditors();
+	 			break;
+
+			case 'placeCursor':
+				placeCursor(ev.data[1]);
+	
+				break;
+	 		case 'stashEditors':
+	 			//   - issued from console
+  -				//	 invokes 'attention' -> 'iframe:post'
+	 			stashEditors();
+
+	 			
+//	 			let jsonString= JSON.stringify(files);
+//				sendMessage("saveEditors", JSON.stringify(files));
+
+	 			break;
+			case 'saveSettings':
+
+				sendMessage(["saveSettings", files]);
+				break;
+
+
+	 		case 'saveSession':
+	 			sendMessage(["saveSession", ev.data[1]]);
+	 			break;
+	 		case 'clearSettings':
+	 		
+	 			sendMessage(["clearSettings"]);
+	 			break;
+			case 'showSettings':
+				sendMessage(["showSettings"]);
+				break;
+	 		case 'restore':
+	 			sendMessage(["restore"]);
+	 			break;	
+
+			case 'moveCursor':
+				moveCursor(ev.data[1], ev.data[2]);
+				break;
+			
+	 		case 'restoreEditors':
+	 			restoreEditors();
+
+	 			break;
+	 		case 'updateEditor':
+	 			updateEditor(ev.data[1]);
+	 			break;	
+ 		}	
+
+  	});	
+
+
+	function compile() {
+     require([
+     "dijit/registry",
+     "dijit/layout/BorderContainer",
+     "dijit/layout/ContentPane",
+     "dijit/layout/TabContainer"
+     
+     ], function () {
+
+		let file= dijit.registry.byId("centerTabs").selectedChildWidget.file;
+		let editorID= dijit.registry.byId("centerTabs").selectedChildWidget.editorID;
+		let code= editor[editorID].getValue();
+
+//console.log(file);
+//alert("Editor:index.html:179");
+		sendMessage(["compile", file, code]);
+		});	
+	}
+	
+	function saveFile() {
+     require([
+     "dijit/registry",
+     "dijit/layout/BorderContainer",
+     "dijit/layout/ContentPane",
+     "dijit/layout/TabContainer"
+     
+     ], function () {
+		let file= dijit.registry.byId("centerTabs").selectedChildWidget.file;
+		let editorID= dijit.registry.byId("centerTabs").selectedChildWidget.editorID;
+		let code= editor[editorID].getValue();
+		sendMessage(["saveFile", file, code]);
+		});	
+		stashEditors();
+		saveSettings();
+		
+	}	
+
+ 	function moveCursor(line, ch) {
+//home:_Fragment.ly_
+     require([
+     'dijit/registry'
+ 	 ], function () {
+ //	 	let line="2";
+ //	 	let ch="2";
+		
+    	var sc= ch;
+    	var ec= parseInt(ch) + 1;
+    	var li= parseInt(line - 1);
+
+ //   	console.log("sc.toString" + ec.toString());
+ 		let editorID= dijit.registry.byId("centerTabs").selectedChildWidget.editorID;
+   		editor[editorID].setSelection({line:li, ch:sc},{line:li, ch:ec});  	
+ 	
+//		editor[editorID].setCursor({line:2, ch:2});
+
+ 
+ 	});
+		
+	}
+
+	
+	function updateEditor(content) {
+		editor[0].setValue(content);
+
+
+	}
+ 	function createEditorPane(file, content, cursor) {
+// 				alert("index.html:218 ");
+     require([
+     "dojo/_base/lang",
+     "dijit/registry",
+     "dijit/layout/BorderContainer",
+     "dijit/layout/ContentPane",
+     "dijit/layout/TabContainer"
+     
+     ], function (lang) {
+            // now parse the page for widgets
+			 			
+ 			
+ 			
+//			let file= JSON.parse(jsonFile);
+
+//			files.push(file);
+//			file.editor= editor.length;
+			let id= makeID(file.path);
+
+			if (!dijit.registry.byId(id)) {
+	
+ 		 	var contentpane= new dijit.layout.ContentPane({
+  //  			"class": "pngContentPane",
+  //  			type: "pngContentPane",
+  //  			path: path,
+  				editorID: editor.length,
+    			file: file,
+    			title: file.filename,	
+    			id: id,
+  //  			onClose: function() {sendMessage(["removeEditor", file]);return true;},
+  
+    			iconClass: "pngIcon",
+				content: "<textarea  id='code" + editor.length + "'  style='width:100%; height: 100%'>" + content + "</textarea>", 
+    			closable:true
+    			 });
+    	   		dijit.registry.byId("centerTabs").addChild(contentpane);
+   	   			dijit.registry.byId("centerTabs").selectChild(contentpane);    	   		
+    			editor[editor.length]= CodeMirror.fromTextArea(document.getElementById("code" + parseInt(editor.length)), {
+        			lineNumbers: true
+	    		});    		
+				saveSettings();
+			}
+			if (cursor) {
+ 	 			let line=cursor[0];
+ 	 			let ch=cursor[1];
+		
+    			var sc= ch;
+ //   	var ec= parseInt(ch) + 1;
+ 				// check the program that called called
+ 				// and adjust accordingly
+ 				
+    			var ec= parseInt(ch) + 1;
+
+    			var li= parseInt(line - 1);
+
+ //   	console.log("sc.toString" + ec.toString());
+ 				let editorID= dijit.registry.byId(id).editorID;
+   				editor[editorID].setSelection({line:li, ch:sc},{line:li, ch:ec});
+ 		
+			}	
+
+     });
+
+ 	}
+function placeCursor(param) {
+
+     require([
+     'dijit/registry'
+ 	 ], function (registry) {
+
+		var splitArray= param.split(":");
+		var errorPaneID= makeID("home:" + splitArray[0]);
+		
+		if (dijit.registry.byId(errorPaneID)) {
+			dijit.registry.byId("centerTabs").selectChild(dijit.registry.byId(errorPaneID)); 
+		}
+		else {
+			//gotta open the file
+			var fileObj= {};
+			fileObj.path= "home:" + splitArray[0];
+			fileObj.filename=  splitArray[0].replace(/^.*(\\|\/|\:)/, '');
+			alert(JSON.stringify(fileObj));
+
+		}
+ 	 	let line=splitArray[1];
+ 	 	let ch=splitArray[3];
+		
+    	var sc= parseInt(ch);
+ //   	var ec= parseInt(ch) - 1;
+    	var ec= parseInt(ch);
+    	var li= parseInt(line - 1);
+
+ //   	console.log("sc.toString" + ec.toString());
+ 		let editorID= dijit.registry.byId("centerTabs").selectedChildWidget.editorID;
+//   		editor[editorID].setSelection({line:li, ch:6},{line:li, ch:});
+// 		editor[editorID].setSelection({line:li, ch:sc},{line:li, ch:ec})
+ 	});
+
+}
+function saveSettings(){
+	sendMessage(["saveSettings", files]);
+}
+function closeEditorCB () {
+
+	stashEditors();
+	saveSettings();
+
+}
+function stashEditors() {
+     require([
+     "dijit/registry",
+     "dijit/layout/BorderContainer",
+     "dijit/layout/ContentPane",
+     "dijit/layout/TabContainer"
+     
+     ], function () {
+
+
+
+			let location= "centerTabs";
+			let firstTab = 0;
+			files= [];
+
+			let length= dijit.registry.byId(location).getChildren().length;
+
+
+			for (var i=firstTab; i < length; i++) {
+				
+				files.push(dijit.registry.byId(location).getChildren()[i].file);
+
+			}
+			//before we make cookie, let's check length
+//			sendMessage(["saveSettings", files]);
+		});	
+	}
+
+function restoreEditors() {
+	for(var i=0; i <files.length; i++) {
+//		createEditorPane(JSON.stringify(files[i]), '');
+		createEditorPane(files[i], '');
+	}
+}
+
+ 	function closeEditors() {
+     require([
+     "dijit/registry",
+     "dijit/layout/BorderContainer",
+     "dijit/layout/ContentPane",
+     "dijit/layout/TabContainer"
+     
+     ], function () {
+
+
+
+			let location= "centerTabs";
+			let firstTab = 0;
+			let nodes= [];
+			
+			let length= dijit.registry.byId(location).getChildren().length;
+
+
+			for (var i=firstTab; i < length; i++) {
+				
+				nodes[i-firstTab]= dijit.registry.byId(location).getChildren()[i].id;			
+			}
+			
+			for (var i=0; i < nodes.length; i++) {
+				
+				if (nodes[i] != "smileysAccordion") {
+					dijit.registry.byId(location).removeChild(dijit.registry.byId(nodes[i]));
+				
+					dijit.registry.byId(nodes[i]).destroyRecursive();
+				}	
+
+			}
+
+		});	
+	}
+
+	
+	function makeID(par) {
+    	    var id= '';
+    		var sp= par.split("/");
+    		var length= sp.length;		
+    		
+    		for (var i= 0; i < length; i++) {
+    			id= id + sp[i] + "_";
+    		}
+    		return id;
+    }
+
+
+</script>
+
+  </body>
+</html>
+
